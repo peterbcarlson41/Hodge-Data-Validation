@@ -1,12 +1,14 @@
 import pandas as pd
 import re
-from data import get_data
+from data import get_data, write_data
+
+import pandas as pd
 
 def clean_data(dataframe):
 
     cleaned_data = []
 
-    for index, row in dataframe.iterrows():
+    for row in dataframe.iterrows():
 
         # Get the values from the dataframe
         bucket_number = row['List the bucket numbers collected'].strip().lower()
@@ -53,10 +55,13 @@ def clean_data(dataframe):
         if bucket_number not in cleaned_data:
             cleaned_data.append(bucket_number)
 
-    return cleaned_data
+    # Convert the cleaned_data list into a DataFrame
+    cleaned_df = pd.DataFrame(cleaned_data, columns=['Cleaned Bucket Numbers'])
+    
+    return cleaned_df
 
 data = get_data("(live) customer bucket tracking","Test_Validation_Dataset")
 
 cleaned_data = clean_data(data)
 
-print(cleaned_data)
+write_data(cleaned_data, "(live) customer bucket tracking","Test_Validation_Dataset", 3)
